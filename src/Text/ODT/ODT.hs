@@ -569,7 +569,7 @@ instance HasParaStyles ODT where
     -- of ParaStyle
     hasParaStyle :: ParaStyle -> ODT -> Bool
     hasParaStyle ps1 odt1
-        | ODTSeq odt2 odt3 <- getParaStylesODT $ odt1 = case toParaStyle odt2 == Just ps1 of
+        | ODTSeq odt2 odt3 <- getParaStylesODT odt1 = case toParaStyle odt2 == Just ps1 of
             True -> True
             False -> hasParaStyle ps1 odt3
         | StyleNode (StyleType alwaysInclude) n1 textprops <- getParaStylesODT odt1 = 
