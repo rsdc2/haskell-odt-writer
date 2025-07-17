@@ -109,7 +109,9 @@ data TextLeafType =
 -- An ODT element (in principle) contains:
 --      a Type (for pattern matching)
 --      an ODTXML node (containing the information for constructing the XML node)
---      an ODT element (comprising the child nodes)
+--      an ODT element (comprising the child nodes), i.e.:
+--          - either a single node
+--          - or an ODTSeq of multiple child nodes
 data ODT where
     OfficeNode    :: OfficeNodeType -> ODTXML -> ODT -> ODT
     TextNode      :: TextNodeType -> ODTXML -> ODT -> ODT
@@ -137,6 +139,8 @@ instance Semigroup ODT where
 
     -- APPEND STYLES TO DOCUMENT
     -- If AlwaysInclude is set to True
+    -- AlwaysInclude is an override for use when the document is serialized as a list
+    -- to make sure that the style goes back in when it is returned to an ODT
     -- content.xml
     OfficeNode AutoStyles n1 odt1 <> StyleNode (StyleType True) n2 odt2 =
         OfficeNode AutoStyles n1 (odt1 <> styleODT)
@@ -384,6 +388,8 @@ instance IsList ODT where
     toList (TextNode (Span tstyle) odtxml odt) = [TextNode (Span tstyle) odtxml odt]
     toList (TextNode typ odtxml odt) = TextNode typ odtxml EmptyODT : toList odt
     toList (TextLeaf typ odtxml) = [TextLeaf typ odtxml]
+    -- Set StyleType AlwaysInclude to True so that ensures that the style is written
+    -- back into the ODT when concatenated in fromList
     toList (StyleNode (StyleType False) odtxml odt) = StyleNode (StyleType True) odtxml EmptyODT : toList odt
     toList (StyleNode typ odtxml odt) = StyleNode typ odtxml EmptyODT : toList odt
     toList (MiscODT odtxml) = [MiscODT odtxml]
@@ -419,7 +425,6 @@ instance HasODT ODT where
     appendODT odt1 odt2 = odt2 <> odt1
  
 -- IsODT instances
-
 instance IsODT Node where
     toODT :: Node -> ODT 
     toODT n 
@@ -460,7 +465,6 @@ instance IsODT Element where
 
 
 -- IsNodes instances
-
 instance IsNodes ODT where
     fromNodes :: [Node] -> ODT
     fromNodes [] = EmptyODT 
