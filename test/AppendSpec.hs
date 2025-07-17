@@ -9,7 +9,14 @@ import qualified Text.XML as X
 import Data.Maybe (fromMaybe)
 
 import Text.ODT hiding (italicPara)
-import ConstantsSpec
+import ConstantsSpec (
+    loadArchive
+  , testText
+  , boldItalicStyle
+  , boldItalicSpan
+  , italicParaStyle
+  , italicPara
+  , odtList)
 
 
 appendBoldItalicTextStyleWithSpanSad :: IO Bool
