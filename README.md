@@ -6,6 +6,8 @@ Haskell ODT Writer provides an interface in Haskell for reading and writing Open
 
 The program is set up to enable the user to compose their own `.odt` files using Haskell syntax. 
 
+Haskell ODT Writer is in beta.
+
 ## Installing and building
 
 So far I have only tested this process on Linux (Ubuntu), not Windows or MacOS. You can install with [Stack](https://docs.haskellstack.org/en/stable/). I installed Haskell and Stack with [GHCup](https://www.haskell.org/ghcup/). 
